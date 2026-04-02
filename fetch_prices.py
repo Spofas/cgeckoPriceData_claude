@@ -40,7 +40,7 @@ FIELDS = [
 
 def get_delay(api_key: str | None) -> float:
     """Return delay between API calls based on whether we have an API key."""
-    return 2.5 if api_key else 7.0
+    return 3.0 if api_key else 12.0
 
 
 def fetch_page(
@@ -57,15 +57,15 @@ def fetch_page(
     if api_key:
         params["x_cg_demo_api_key"] = api_key
 
-    backoff_times = [30, 60, 120]
+    backoff_times = [60, 120, 180, 240]
     last_error = None
 
-    for attempt in range(4):  # 1 initial + 3 retries
+    for attempt in range(5):  # 1 initial + 4 retries
         try:
             resp = session.get(API_BASE_URL, params=params, timeout=30)
 
             if resp.status_code == 429:
-                if attempt < 3:
+                if attempt < 4:
                     wait = int(
                         resp.headers.get("Retry-After", backoff_times[attempt])
                     )
@@ -79,7 +79,7 @@ def fetch_page(
 
         except requests.RequestException as e:
             last_error = e
-            if attempt < 3:
+            if attempt < 4:
                 wait = backoff_times[attempt]
                 print(f"  Error on page {page}: {e}. Retrying in {wait}s...")
                 time.sleep(wait)
