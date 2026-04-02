@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Data — Top 5000 Coins</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.6;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .subtitle { color: #8b949e; font-size: 1.1rem; margin-bottom: 2rem; }
+        .last-updated {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: #8b949e;
+        }
+        .last-updated strong { color: #58a6ff; }
+        .download-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .card:hover { border-color: #58a6ff; }
+        .card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .card p { color: #8b949e; font-size: 0.9rem; margin-bottom: 1rem; }
+        .btn {
+            display: inline-block;
+            background: #238636;
+            color: #fff;
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #2ea043; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #30363d;
+            color: #e6edf3;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+        .btn-outline:hover { border-color: #58a6ff; }
+        section { margin-bottom: 2.5rem; }
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .code-block {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .code-block code { color: #e6edf3; }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #30363d;
+            color: #8b949e;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .copy-btn:hover { color: #e6edf3; }
+        .label { color: #8b949e; font-size: 0.85rem; margin-bottom: 0.3rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        th { color: #8b949e; font-weight: 600; }
+        .top-coins-table td:nth-child(3) { text-transform: uppercase; }
+        .price { font-family: 'SF Mono', monospace; }
+        .fields-table td:first-child {
+            font-family: 'SF Mono', monospace;
+            font-size: 0.8rem;
+            color: #79c0ff;
+        }
+        footer {
+            border-top: 1px solid #21262d;
+            padding-top: 1.5rem;
+            color: #8b949e;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .download-cards { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Price Data</h1>
+        <p class="subtitle">Top 5,000 cryptocurrencies by market cap, refreshed every 2 hours</p>
+
+        <div class="last-updated" id="last-updated">
+            Loading last update time...
+        </div>
+
+        <div class="download-cards">
+            <div class="card">
+                <h3>CSV</h3>
+                <p>Best for spreadsheets.<br>Import directly into Google Sheets or Excel.</p>
+                <a class="btn" id="csv-link" href="data/prices.csv" download>Download CSV</a>
+            </div>
+            <div class="card">
+                <h3>JSON</h3>
+                <p>Best for developers.<br>Structured data with metadata.</p>
+                <a class="btn" id="json-link" href="data/prices.json" download>Download JSON</a>
+            </div>
+        </div>
+
+        <section id="preview-section" style="display:none;">
+            <h2>Top 10 Coins (Preview)</h2>
+            <table class="top-coins-table">
+                <thead><tr><th>#</th><th>Name</th><th>Symbol</th><th>Price (USD)</th></tr></thead>
+                <tbody id="top-coins"></tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Google Sheets Integration</h2>
+            <p class="label">Paste this formula into any cell to import the full dataset:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code id="importdata-formula">=IMPORTDATA("https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv")</code>
+            </div>
+            <p class="label">The data refreshes automatically — Google Sheets will pick up updates within ~1 hour.</p>
+        </section>
+
+        <section>
+            <h2>Excel Integration</h2>
+            <p class="label">Option 1: Download the CSV and open it directly.</p>
+            <p class="label" style="margin-top:0.5rem;">Option 2: Use Power Query for auto-refresh — go to <strong>Data → From Web</strong> and enter:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv</code>
+            </div>
+        </section>
+
+        <section>
+            <h2>API / Raw URLs</h2>
+            <p class="label">Use these URLs to fetch data programmatically:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv</code>
+            </div>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.json</code>
+            </div>
+        </section>
+
+        <section>
+            <h2>Data Fields</h2>
+            <table class="fields-table">
+                <thead><tr><th>Field</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>market_cap_rank</td><td>Rank by market capitalization</td></tr>
+                    <tr><td>id</td><td>CoinGecko coin identifier</td></tr>
+                    <tr><td>symbol</td><td>Ticker symbol (e.g. btc, eth)</td></tr>
+                    <tr><td>name</td><td>Full coin name</td></tr>
+                    <tr><td>current_price</td><td>Current price in USD</td></tr>
+                    <tr><td>market_cap</td><td>Market capitalization in USD</td></tr>
+                    <tr><td>total_volume</td><td>24h trading volume in USD</td></tr>
+                    <tr><td>price_change_24h</td><td>Price change in USD (24h)</td></tr>
+                    <tr><td>price_change_percentage_24h</td><td>Price change percentage (24h)</td></tr>
+                    <tr><td>market_cap_change_24h</td><td>Market cap change in USD (24h)</td></tr>
+                    <tr><td>market_cap_change_percentage_24h</td><td>Market cap change percentage (24h)</td></tr>
+                    <tr><td>circulating_supply</td><td>Coins currently in circulation</td></tr>
+                    <tr><td>total_supply</td><td>Total coins that exist</td></tr>
+                    <tr><td>max_supply</td><td>Maximum possible supply (null if unlimited)</td></tr>
+                    <tr><td>ath</td><td>All-time high price in USD</td></tr>
+                    <tr><td>ath_change_percentage</td><td>Percentage from all-time high</td></tr>
+                    <tr><td>ath_date</td><td>Date of all-time high</td></tr>
+                    <tr><td>last_updated</td><td>When this coin's data was last updated</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Run It Yourself</h2>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>git clone https://github.com/spofas/cgeckopricedata_claude.git
+cd cgeckopricedata_claude
+pip install -r requirements.txt
+python fetch_prices.py</code>
+            </div>
+            <p class="label">Optionally set <code>COINGECKO_API_KEY</code> env var for faster fetching (free key from coingecko.com).</p>
+        </section>
+
+        <footer>
+            <p>Data sourced from <a href="https://www.coingecko.com/" target="_blank">CoinGecko</a>. Updated every 2 hours via GitHub Actions.</p>
+            <p style="margin-top:0.5rem;"><a href="https://github.com/spofas/cgeckopricedata_claude" target="_blank">View on GitHub</a></p>
+        </footer>
+    </div>
+
+    <script>
+        async function loadMetadata() {
+            try {
+                const resp = await fetch('data/metadata.json');
+                if (!resp.ok) return;
+                const meta = await resp.json();
+
+                // Last updated
+                const date = new Date(meta.last_updated_utc);
+                document.getElementById('last-updated').innerHTML =
+                    `<strong>Last updated:</strong> ${date.toUTCString()} &mdash; <strong>${meta.count.toLocaleString()}</strong> coins tracked`;
+
+                // Top 10 preview
+                if (meta.top_10 && meta.top_10.length > 0) {
+                    const tbody = document.getElementById('top-coins');
+                    meta.top_10.forEach(coin => {
+                        const price = coin.price != null
+                            ? '$' + coin.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+                            : 'N/A';
+                        tbody.innerHTML += `<tr>
+                            <td>${coin.rank || '—'}</td>
+                            <td>${coin.name}</td>
+                            <td>${coin.symbol}</td>
+                            <td class="price">${price}</td>
+                        </tr>`;
+                    });
+                    document.getElementById('preview-section').style.display = 'block';
+                }
+            } catch (e) {
+                document.getElementById('last-updated').innerHTML =
+                    'Data not yet available. Run <code>python fetch_prices.py</code> to generate.';
+            }
+        }
+
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('code').innerText;
+            navigator.clipboard.writeText(code);
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        }
+
+        loadMetadata();
+    </script>
+</body>
+</html>
