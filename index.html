@@ -327,6 +327,16 @@
             </table>
         </section>
 
+        <section id="formula-builder">
+            <h2>Google Sheets Formula Builder</h2>
+            <p class="label">Select fields above in Custom Export, then copy this auto-generated formula into Google Sheets. It imports only your chosen columns and auto-refreshes.</p>
+            <div class="code-block" style="min-height: 3rem;">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code id="custom-formula">=QUERY(IMPORTDATA("https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv"), "SELECT Col1, Col3, Col4, Col5", 1)</code>
+            </div>
+            <p class="label" id="formula-field-hint">Currently selected: <strong>market_cap_rank, symbol, name, current_price</strong></p>
+        </section>
+
         <section>
             <h2>Run It Yourself</h2>
             <div class="code-block">
@@ -379,8 +389,45 @@ python fetch_prices.py</code>
             }
         }
 
+        const ALL_FIELDS = [
+            'market_cap_rank', 'id', 'symbol', 'name', 'current_price',
+            'market_cap', 'total_volume', 'price_change_24h', 'price_change_percentage_24h',
+            'market_cap_change_24h', 'market_cap_change_percentage_24h', 'circulating_supply',
+            'total_supply', 'max_supply', 'ath', 'ath_change_percentage', 'ath_date', 'last_updated'
+        ];
+
+        function getSelectedFields() {
+            return Array.from(document.querySelectorAll('#field-checkboxes input:checked')).map(cb => cb.value);
+        }
+
+        function updateFormula() {
+            const selected = getSelectedFields();
+            const formulaEl = document.getElementById('custom-formula');
+            const hintEl = document.getElementById('formula-field-hint');
+
+            if (selected.length === 0) {
+                formulaEl.textContent = 'Select at least one field above.';
+                hintEl.innerHTML = 'No fields selected.';
+                return;
+            }
+
+            const cols = selected.map(f => 'Col' + (ALL_FIELDS.indexOf(f) + 1));
+
+            if (selected.length === ALL_FIELDS.length) {
+                formulaEl.textContent = '=IMPORTDATA("https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv")';
+            } else {
+                formulaEl.textContent = `=QUERY(IMPORTDATA("https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv"), "SELECT ${cols.join(', ')}", 1)`;
+            }
+
+            hintEl.innerHTML = 'Currently selected: <strong>' + selected.join(', ') + '</strong>';
+        }
+
+        // Listen for checkbox changes
+        document.getElementById('field-checkboxes').addEventListener('change', updateFormula);
+
         function toggleAllFields(checked) {
             document.querySelectorAll('#field-checkboxes input[type="checkbox"]').forEach(cb => cb.checked = checked);
+            updateFormula();
         }
 
         async function customExport(format) {
