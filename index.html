@@ -132,6 +132,37 @@
         }
         .copy-btn:hover { color: var(--text); }
         .label { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.4rem 1rem;
+            margin-bottom: 1rem;
+        }
+        .field-grid label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0.3rem 0;
+        }
+        .field-grid label:hover { color: var(--accent); }
+        .field-grid input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; }
+        .field-grid .field-name {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-code);
+        }
+        .export-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .export-actions .btn { font-size: 0.85rem; padding: 0.5rem 1.2rem; cursor: pointer; border: none; }
+        .select-links { margin-bottom: 0.75rem; font-size: 0.8rem; }
+        .select-links a { cursor: pointer; margin-right: 1rem; }
+        .export-status { color: var(--muted); font-size: 0.8rem; margin-left: 0.5rem; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -193,6 +224,40 @@
                 <a class="btn" id="json-link" href="data/prices.json" download>Download JSON</a>
             </div>
         </div>
+
+        <section id="custom-export">
+            <h2>Custom Export</h2>
+            <p class="label">Select the fields you want, then download a filtered CSV or JSON file.</p>
+            <div class="select-links">
+                <a onclick="toggleAllFields(true)">Select all</a>
+                <a onclick="toggleAllFields(false)">Deselect all</a>
+            </div>
+            <div class="field-grid" id="field-checkboxes">
+                <label><input type="checkbox" value="market_cap_rank" checked> <span class="field-name">market_cap_rank</span></label>
+                <label><input type="checkbox" value="id"> <span class="field-name">id</span></label>
+                <label><input type="checkbox" value="symbol" checked> <span class="field-name">symbol</span></label>
+                <label><input type="checkbox" value="name" checked> <span class="field-name">name</span></label>
+                <label><input type="checkbox" value="current_price" checked> <span class="field-name">current_price</span></label>
+                <label><input type="checkbox" value="market_cap"> <span class="field-name">market_cap</span></label>
+                <label><input type="checkbox" value="total_volume"> <span class="field-name">total_volume</span></label>
+                <label><input type="checkbox" value="price_change_24h"> <span class="field-name">price_change_24h</span></label>
+                <label><input type="checkbox" value="price_change_percentage_24h"> <span class="field-name">price_change_percentage_24h</span></label>
+                <label><input type="checkbox" value="market_cap_change_24h"> <span class="field-name">market_cap_change_24h</span></label>
+                <label><input type="checkbox" value="market_cap_change_percentage_24h"> <span class="field-name">market_cap_change_percentage_24h</span></label>
+                <label><input type="checkbox" value="circulating_supply"> <span class="field-name">circulating_supply</span></label>
+                <label><input type="checkbox" value="total_supply"> <span class="field-name">total_supply</span></label>
+                <label><input type="checkbox" value="max_supply"> <span class="field-name">max_supply</span></label>
+                <label><input type="checkbox" value="ath"> <span class="field-name">ath</span></label>
+                <label><input type="checkbox" value="ath_change_percentage"> <span class="field-name">ath_change_percentage</span></label>
+                <label><input type="checkbox" value="ath_date"> <span class="field-name">ath_date</span></label>
+                <label><input type="checkbox" value="last_updated"> <span class="field-name">last_updated</span></label>
+            </div>
+            <div class="export-actions">
+                <button class="btn" onclick="customExport('csv')">Download CSV</button>
+                <button class="btn" onclick="customExport('json')">Download JSON</button>
+                <span class="export-status" id="export-status"></span>
+            </div>
+        </section>
 
         <section id="preview-section" style="display:none;">
             <h2>Top 10 Coins (Preview)</h2>
@@ -311,6 +376,66 @@ python fetch_prices.py</code>
             } catch (e) {
                 document.getElementById('last-updated').innerHTML =
                     'Data not yet available. Run <code>python fetch_prices.py</code> to generate.';
+            }
+        }
+
+        function toggleAllFields(checked) {
+            document.querySelectorAll('#field-checkboxes input[type="checkbox"]').forEach(cb => cb.checked = checked);
+        }
+
+        async function customExport(format) {
+            const status = document.getElementById('export-status');
+            const selected = Array.from(document.querySelectorAll('#field-checkboxes input:checked')).map(cb => cb.value);
+
+            if (selected.length === 0) {
+                status.textContent = 'Please select at least one field.';
+                return;
+            }
+
+            status.textContent = 'Loading data...';
+
+            try {
+                const resp = await fetch('data/prices.json');
+                if (!resp.ok) throw new Error('Failed to load data');
+                const json = await resp.json();
+                const data = json.data;
+
+                let blob, filename;
+
+                if (format === 'csv') {
+                    const header = selected.join(',');
+                    const rows = data.map(coin =>
+                        selected.map(f => {
+                            const val = coin[f];
+                            if (val == null) return '';
+                            const str = String(val);
+                            return str.includes(',') || str.includes('"') || str.includes('\n')
+                                ? '"' + str.replace(/"/g, '""') + '"'
+                                : str;
+                        }).join(',')
+                    );
+                    blob = new Blob([header + '\n' + rows.join('\n')], { type: 'text/csv' });
+                    filename = 'crypto_prices_custom.csv';
+                } else {
+                    const filtered = data.map(coin => {
+                        const obj = {};
+                        selected.forEach(f => obj[f] = coin[f]);
+                        return obj;
+                    });
+                    const output = { last_updated_utc: json.last_updated_utc, count: filtered.length, fields: selected, data: filtered };
+                    blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+                    filename = 'crypto_prices_custom.json';
+                }
+
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                status.textContent = `Downloaded ${data.length} rows with ${selected.length} field(s).`;
+            } catch (e) {
+                status.textContent = 'Error: ' + e.message;
             }
         }
 
