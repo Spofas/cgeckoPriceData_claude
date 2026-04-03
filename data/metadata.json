@@ -1,24 +1,24 @@
 {
-  "last_updated_utc": "2026-04-03T03:26:24.475327+00:00",
+  "last_updated_utc": "2026-04-03T05:49:00.953376+00:00",
   "count": 5000,
   "top_10": [
     {
       "rank": 1,
       "name": "Bitcoin",
       "symbol": "btc",
-      "price": 66688
+      "price": 66746
     },
     {
       "rank": 2,
       "name": "Ethereum",
       "symbol": "eth",
-      "price": 2055.88
+      "price": 2060.25
     },
     {
       "rank": 3,
       "name": "Tether",
       "symbol": "usdt",
-      "price": 0.999889
+      "price": 0.999923
     },
     {
       "rank": 4,
@@ -30,7 +30,7 @@
       "rank": 5,
       "name": "BNB",
       "symbol": "bnb",
-      "price": 585.81
+      "price": 587.52
     },
     {
       "rank": 6,
@@ -42,13 +42,13 @@
       "rank": 7,
       "name": "Solana",
       "symbol": "sol",
-      "price": 79.3
+      "price": 79.48
     },
     {
       "rank": 8,
       "name": "TRON",
       "symbol": "trx",
-      "price": 0.315056
+      "price": 0.315004
     },
     {
       "rank": 9,
@@ -60,7 +60,7 @@
       "rank": 10,
       "name": "Dogecoin",
       "symbol": "doge",
-      "price": 0.090386
+      "price": 0.091356
     }
   ]
 }
