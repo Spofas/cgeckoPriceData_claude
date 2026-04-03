@@ -225,40 +225,6 @@
             </div>
         </div>
 
-        <section id="custom-export">
-            <h2>Custom Export</h2>
-            <p class="label">Select the fields you want, then download a filtered CSV or JSON file.</p>
-            <div class="select-links">
-                <a onclick="toggleAllFields(true)">Select all</a>
-                <a onclick="toggleAllFields(false)">Deselect all</a>
-            </div>
-            <div class="field-grid" id="field-checkboxes">
-                <label><input type="checkbox" value="market_cap_rank" checked> <span class="field-name">market_cap_rank</span></label>
-                <label><input type="checkbox" value="id"> <span class="field-name">id</span></label>
-                <label><input type="checkbox" value="symbol" checked> <span class="field-name">symbol</span></label>
-                <label><input type="checkbox" value="name" checked> <span class="field-name">name</span></label>
-                <label><input type="checkbox" value="current_price" checked> <span class="field-name">current_price</span></label>
-                <label><input type="checkbox" value="market_cap"> <span class="field-name">market_cap</span></label>
-                <label><input type="checkbox" value="total_volume"> <span class="field-name">total_volume</span></label>
-                <label><input type="checkbox" value="price_change_24h"> <span class="field-name">price_change_24h</span></label>
-                <label><input type="checkbox" value="price_change_percentage_24h"> <span class="field-name">price_change_percentage_24h</span></label>
-                <label><input type="checkbox" value="market_cap_change_24h"> <span class="field-name">market_cap_change_24h</span></label>
-                <label><input type="checkbox" value="market_cap_change_percentage_24h"> <span class="field-name">market_cap_change_percentage_24h</span></label>
-                <label><input type="checkbox" value="circulating_supply"> <span class="field-name">circulating_supply</span></label>
-                <label><input type="checkbox" value="total_supply"> <span class="field-name">total_supply</span></label>
-                <label><input type="checkbox" value="max_supply"> <span class="field-name">max_supply</span></label>
-                <label><input type="checkbox" value="ath"> <span class="field-name">ath</span></label>
-                <label><input type="checkbox" value="ath_change_percentage"> <span class="field-name">ath_change_percentage</span></label>
-                <label><input type="checkbox" value="ath_date"> <span class="field-name">ath_date</span></label>
-                <label><input type="checkbox" value="last_updated"> <span class="field-name">last_updated</span></label>
-            </div>
-            <div class="export-actions">
-                <button class="btn" onclick="customExport('csv')">Download CSV</button>
-                <button class="btn" onclick="customExport('json')">Download JSON</button>
-                <span class="export-status" id="export-status"></span>
-            </div>
-        </section>
-
         <section id="preview-section" style="display:none;">
             <h2>Top 10 Coins (Preview)</h2>
             <table class="top-coins-table">
@@ -301,40 +267,50 @@
         </section>
 
         <section>
-            <h2>Data Fields</h2>
+            <h2>Data Fields &amp; Custom Export</h2>
+            <p class="label">Select the fields you need. Use the generated formula for Google Sheets, or download a filtered file.</p>
+            <div class="select-links">
+                <a onclick="toggleAllFields(true)">Select all</a>
+                <a onclick="toggleAllFields(false)">Deselect all</a>
+            </div>
             <table class="fields-table">
-                <thead><tr><th>Field</th><th>Description</th></tr></thead>
-                <tbody>
-                    <tr><td>market_cap_rank</td><td>Rank by market capitalization</td></tr>
-                    <tr><td>id</td><td>CoinGecko coin identifier</td></tr>
-                    <tr><td>symbol</td><td>Ticker symbol (e.g. btc, eth)</td></tr>
-                    <tr><td>name</td><td>Full coin name</td></tr>
-                    <tr><td>current_price</td><td>Current price in USD</td></tr>
-                    <tr><td>market_cap</td><td>Market capitalization in USD</td></tr>
-                    <tr><td>total_volume</td><td>24h trading volume in USD</td></tr>
-                    <tr><td>price_change_24h</td><td>Price change in USD (24h)</td></tr>
-                    <tr><td>price_change_percentage_24h</td><td>Price change percentage (24h)</td></tr>
-                    <tr><td>market_cap_change_24h</td><td>Market cap change in USD (24h)</td></tr>
-                    <tr><td>market_cap_change_percentage_24h</td><td>Market cap change percentage (24h)</td></tr>
-                    <tr><td>circulating_supply</td><td>Coins currently in circulation</td></tr>
-                    <tr><td>total_supply</td><td>Total coins that exist</td></tr>
-                    <tr><td>max_supply</td><td>Maximum possible supply (null if unlimited)</td></tr>
-                    <tr><td>ath</td><td>All-time high price in USD</td></tr>
-                    <tr><td>ath_change_percentage</td><td>Percentage from all-time high</td></tr>
-                    <tr><td>ath_date</td><td>Date of all-time high</td></tr>
-                    <tr><td>last_updated</td><td>When this coin's data was last updated</td></tr>
+                <thead><tr><th style="width:2rem;"></th><th>Field</th><th>Description</th></tr></thead>
+                <tbody id="field-checkboxes">
+                    <tr><td><input type="checkbox" value="market_cap_rank" checked></td><td>market_cap_rank</td><td>Rank by market capitalization</td></tr>
+                    <tr><td><input type="checkbox" value="id"></td><td>id</td><td>CoinGecko coin identifier</td></tr>
+                    <tr><td><input type="checkbox" value="symbol" checked></td><td>symbol</td><td>Ticker symbol (e.g. btc, eth)</td></tr>
+                    <tr><td><input type="checkbox" value="name" checked></td><td>name</td><td>Full coin name</td></tr>
+                    <tr><td><input type="checkbox" value="current_price" checked></td><td>current_price</td><td>Current price in USD</td></tr>
+                    <tr><td><input type="checkbox" value="market_cap"></td><td>market_cap</td><td>Market capitalization in USD</td></tr>
+                    <tr><td><input type="checkbox" value="total_volume"></td><td>total_volume</td><td>24h trading volume in USD</td></tr>
+                    <tr><td><input type="checkbox" value="price_change_24h"></td><td>price_change_24h</td><td>Price change in USD (24h)</td></tr>
+                    <tr><td><input type="checkbox" value="price_change_percentage_24h"></td><td>price_change_percentage_24h</td><td>Price change percentage (24h)</td></tr>
+                    <tr><td><input type="checkbox" value="market_cap_change_24h"></td><td>market_cap_change_24h</td><td>Market cap change in USD (24h)</td></tr>
+                    <tr><td><input type="checkbox" value="market_cap_change_percentage_24h"></td><td>market_cap_change_percentage_24h</td><td>Market cap change percentage (24h)</td></tr>
+                    <tr><td><input type="checkbox" value="circulating_supply"></td><td>circulating_supply</td><td>Coins currently in circulation</td></tr>
+                    <tr><td><input type="checkbox" value="total_supply"></td><td>total_supply</td><td>Total coins that exist</td></tr>
+                    <tr><td><input type="checkbox" value="max_supply"></td><td>max_supply</td><td>Maximum possible supply (null if unlimited)</td></tr>
+                    <tr><td><input type="checkbox" value="ath"></td><td>ath</td><td>All-time high price in USD</td></tr>
+                    <tr><td><input type="checkbox" value="ath_change_percentage"></td><td>ath_change_percentage</td><td>Percentage from all-time high</td></tr>
+                    <tr><td><input type="checkbox" value="ath_date"></td><td>ath_date</td><td>Date of all-time high</td></tr>
+                    <tr><td><input type="checkbox" value="last_updated"></td><td>last_updated</td><td>When this coin's data was last updated</td></tr>
                 </tbody>
             </table>
-        </section>
 
-        <section id="formula-builder">
-            <h2>Google Sheets Formula Builder</h2>
-            <p class="label">Select fields above in Custom Export, then copy this auto-generated formula into Google Sheets. It imports only your chosen columns and auto-refreshes.</p>
+            <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Google Sheets Formula</h3>
+            <p class="label">Copy this formula into any Google Sheets cell — it auto-refreshes with only your selected columns.</p>
             <div class="code-block" style="min-height: 3rem;">
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 <code id="custom-formula">=QUERY(IMPORTDATA("https://raw.githubusercontent.com/spofas/cgeckopricedata_claude/main/data/prices.csv"), "SELECT Col1, Col3, Col4, Col5", 1)</code>
             </div>
             <p class="label" id="formula-field-hint">Currently selected: <strong>market_cap_rank, symbol, name, current_price</strong></p>
+
+            <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Download Filtered File</h3>
+            <div class="export-actions">
+                <button class="btn" onclick="customExport('csv')">Download CSV</button>
+                <button class="btn" onclick="customExport('json')">Download JSON</button>
+                <span class="export-status" id="export-status"></span>
+            </div>
         </section>
 
         <section>
