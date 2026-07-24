@@ -1,36 +1,36 @@
 {
-  "last_updated_utc": "2026-07-24T03:38:01.012533+00:00",
+  "last_updated_utc": "2026-07-24T06:37:19.994126+00:00",
   "count": 5000,
   "top_10": [
     {
       "rank": 1,
       "name": "Bitcoin",
       "symbol": "btc",
-      "price": 65246
+      "price": 65383
     },
     {
       "rank": 2,
       "name": "Ethereum",
       "symbol": "eth",
-      "price": 1876.81
+      "price": 1883.62
     },
     {
       "rank": 3,
       "name": "Tether",
       "symbol": "usdt",
-      "price": 0.999321
+      "price": 0.99932
     },
     {
       "rank": 4,
       "name": "BNB",
       "symbol": "bnb",
-      "price": 569.35
+      "price": 568.04
     },
     {
       "rank": 5,
       "name": "USDC",
       "symbol": "usdc",
-      "price": 0.999721
+      "price": 0.999749
     },
     {
       "rank": 6,
@@ -42,13 +42,13 @@
       "rank": 7,
       "name": "Solana",
       "symbol": "sol",
-      "price": 75.77
+      "price": 75.8
     },
     {
       "rank": 8,
       "name": "TRON",
       "symbol": "trx",
-      "price": 0.328468
+      "price": 0.33011
     },
     {
       "rank": 9,
@@ -60,7 +60,7 @@
       "rank": 16,
       "name": "WhiteBIT Coin",
       "symbol": "wbt",
-      "price": 56.71
+      "price": 56.7
     }
   ]
 }
