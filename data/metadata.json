@@ -1,66 +1,66 @@
 {
-  "last_updated_utc": "2026-07-26T21:09:59.483458+00:00",
+  "last_updated_utc": "2026-07-26T23:10:00.372987+00:00",
   "count": 5000,
   "top_10": [
     {
       "rank": 1,
       "name": "Bitcoin",
       "symbol": "btc",
-      "price": 64618
+      "price": 65419
     },
     {
       "rank": 2,
       "name": "Ethereum",
       "symbol": "eth",
-      "price": 1912.99
+      "price": 1951.82
     },
     {
       "rank": 3,
       "name": "Tether",
       "symbol": "usdt",
-      "price": 0.999083
+      "price": 0.99928
     },
     {
       "rank": 4,
       "name": "BNB",
       "symbol": "bnb",
-      "price": 572.53
+      "price": 575.27
     },
     {
       "rank": 5,
       "name": "USDC",
       "symbol": "usdc",
-      "price": 0.999943
+      "price": 0.999741
     },
     {
       "rank": 6,
       "name": "XRP",
       "symbol": "xrp",
-      "price": 1.1
+      "price": 1.11
     },
     {
       "rank": 7,
       "name": "Solana",
       "symbol": "sol",
-      "price": 75.29
+      "price": 76.73
     },
     {
       "rank": 8,
       "name": "TRON",
       "symbol": "trx",
-      "price": 0.331729
+      "price": 0.331841
     },
     {
       "rank": 9,
       "name": "Figure Heloc",
       "symbol": "figr_heloc",
-      "price": 1.033
+      "price": 1.034
     },
     {
-      "rank": 10,
-      "name": "Hyperliquid",
-      "symbol": "hype",
-      "price": 58.91
+      "rank": 16,
+      "name": "WhiteBIT Coin",
+      "symbol": "wbt",
+      "price": 57.32
     }
   ]
 }
