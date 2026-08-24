@@ -1,30 +1,30 @@
 {
-  "last_updated_utc": "2026-08-24T03:14:00.870423+00:00",
+  "last_updated_utc": "2026-08-24T04:57:59.577534+00:00",
   "count": 5000,
   "top_10": [
     {
       "rank": 1,
       "name": "Bitcoin",
       "symbol": "btc",
-      "price": 77303
+      "price": 76777
     },
     {
       "rank": 2,
       "name": "Ethereum",
       "symbol": "eth",
-      "price": 2437.65
+      "price": 2432.45
     },
     {
       "rank": 3,
       "name": "Tether",
       "symbol": "usdt",
-      "price": 0.999896
+      "price": 0.999894
     },
     {
       "rank": 4,
       "name": "BNB",
       "symbol": "bnb",
-      "price": 697.76
+      "price": 695.36
     },
     {
       "rank": 5,
@@ -36,19 +36,19 @@
       "rank": 6,
       "name": "USDC",
       "symbol": "usdc",
-      "price": 0.999929
+      "price": 0.999894
     },
     {
       "rank": 7,
       "name": "Solana",
       "symbol": "sol",
-      "price": 94.14
+      "price": 93.85
     },
     {
       "rank": 8,
       "name": "TRON",
       "symbol": "trx",
-      "price": 0.343555
+      "price": 0.343843
     },
     {
       "rank": 9,
@@ -60,7 +60,7 @@
       "rank": 9,
       "name": "Hyperliquid",
       "symbol": "hype",
-      "price": 80.42
+      "price": 79.85
     }
   ]
 }
