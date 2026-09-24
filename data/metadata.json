@@ -1,66 +1,66 @@
 {
-  "last_updated_utc": "2026-09-24T11:39:12.618446+00:00",
+  "last_updated_utc": "2026-09-24T17:06:03.962843+00:00",
   "count": 5000,
   "top_10": [
     {
       "rank": 1,
       "name": "Bitcoin",
       "symbol": "btc",
-      "price": 83439
+      "price": 84432
     },
     {
       "rank": 2,
       "name": "Ethereum",
       "symbol": "eth",
-      "price": 2644.81
+      "price": 2685.59
     },
     {
       "rank": 3,
       "name": "Tether",
       "symbol": "usdt",
-      "price": 0.999731
+      "price": 0.999661
     },
     {
       "rank": 4,
       "name": "BNB",
       "symbol": "bnb",
-      "price": 769.01
+      "price": 780.45
     },
     {
       "rank": 5,
       "name": "XRP",
       "symbol": "xrp",
-      "price": 1.47
+      "price": 1.53
     },
     {
       "rank": 6,
       "name": "USDC",
       "symbol": "usdc",
-      "price": 0.999798
+      "price": 0.999791
     },
     {
       "rank": 7,
       "name": "Solana",
       "symbol": "sol",
-      "price": 113.14
+      "price": 117.13
     },
     {
       "rank": 8,
       "name": "TRON",
       "symbol": "trx",
-      "price": 0.339179
+      "price": 0.341347
     },
     {
       "rank": 9,
       "name": "Zcash",
       "symbol": "zec",
-      "price": 1480.82
+      "price": 1544.23
     },
     {
       "rank": 10,
       "name": "Figure Heloc",
       "symbol": "figr_heloc",
-      "price": 1.035
+      "price": 1.016
     }
   ]
 }
